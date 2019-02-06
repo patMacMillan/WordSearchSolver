@@ -1,11 +1,11 @@
 # Vars
-word_search = [['t', 'h', 'g', 'l', 'r'],
-               ['k', 'k', 'k', 't', 'j'],
-               ['k', 'k', 'i', 't', 'e'],
-               ['k', 'k', 'k', 'i', 'm'],
+word_search = [['t', 'h', 'g', 'i', 'r'],
+               ['i', 'k', 'k', 't', 'j'],
+               ['g', 'k', 'i', 't', 'e'],
+               ['h', 'k', 'k', 'i', 'm'],
                ['t', 'a', 'e', 'm', 'e']]
 
-word_bank = ['kite', 'tim']
+word_bank = ['tim', 'kite', 'right', 'tight']
 
 # Functions
 
@@ -36,13 +36,16 @@ def getCO(x, y, word, puzz):
     dirs = findDir(movs,word[1],puzz)
     for dir in dirs:
         print(dir)
+        # Reinit movs with initial values
+        movs = updateMovs(x, y)
         coords = [[x, y]]
         # Iterate from the second letter to the end of the word.
         for letIndx in range(1, len(word), 1):
+            currLet = word[letIndx]
             #print('On ' + word + ': looking for ' + word[letIndx])
             if inRange(movs[dir][0], movs[dir][1], len(puzz), len(puzz[0])):
-                if puzz[movs[dir][0]][movs[dir][1]] == word[letIndx]:
-                    print('Found ' + word[letIndx] + ' at ' + str(movs[dir][0]) + ',' + str(movs[dir][1]))
+                if puzz[movs[dir][0]][movs[dir][1]] == currLet:
+                    print('Found ' + currLet + ' at ' + str(movs[dir][0]) + ',' + str(movs[dir][1]))
                     coords.append([movs[dir][0], movs[dir][1]])
                     movs = updateMovs(movs[dir][0], movs[dir][1])
                     # Finds if at last index
@@ -51,6 +54,7 @@ def getCO(x, y, word, puzz):
                         return coords
                 else:
                     coords = []
+                    break
     print('Not here, restarting search for ' + word + '...')
     return []
 # Tells if the item is range
@@ -84,7 +88,9 @@ def findDir(movs, lett, puzz):
         # Make sure value is in range
         if (movs[dir][0] >= 0) and (movs[dir][0] < xLim) and \
            (movs[dir][1] >= 0) and (movs[dir][1] < yLim):
-            if puzz[movs[dir][0]][movs[dir][1]] == lett:
+            # Current letter based on the direction movement.
+            currLett = puzz[movs[dir][0]][movs[dir][1]]
+            if currLett == lett:
                 #print('Found match on index %d' % dir)
                 dirList.append(dir)
     print(dirList)
